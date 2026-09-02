@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Database\Seeders\ProgramSeeder;
+use Database\Seeders\TrainerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ProgramSeeder::class,
+            TrainerSeeder::class,
         ]);
 
         // User::factory(10)->create();
