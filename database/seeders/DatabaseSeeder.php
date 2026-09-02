@@ -10,6 +10,7 @@ use Database\Seeders\TrainerSeeder;
 use Database\Seeders\TestimonialSeeder;
 use Database\Seeders\FaqSeeder;
 use Database\Seeders\ClubLocationSeeder;
+use Database\Seeders\PartnerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
             TestimonialSeeder::class,
             FaqSeeder::class,
             ClubLocationSeeder::class,
+            PartnerSeeder::class,
         ]);
 
         // User::factory(10)->create();
