@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\ProgramSeeder;
 use Database\Seeders\TrainerSeeder;
 use Database\Seeders\TestimonialSeeder;
+use Database\Seeders\FaqSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ProgramSeeder::class,
             TrainerSeeder::class,
             TestimonialSeeder::class,
+            FaqSeeder::class,
         ]);
 
         // User::factory(10)->create();
