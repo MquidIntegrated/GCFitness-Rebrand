@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\ProgramsController;
@@ -10,3 +11,4 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', [AboutController::class, 'index']);
 Route::get('/programs', [ProgramsController::class, 'index']);
 Route::get('/membership', [MembershipController::class, 'index']);
+Route::get('/contact', [ContactController::class, 'index']);
