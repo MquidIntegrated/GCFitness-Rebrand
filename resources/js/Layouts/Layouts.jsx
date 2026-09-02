@@ -1,19 +1,29 @@
-import { Link } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "@/Components/ThemeProvider";
+import { Preloader } from "@/Components/Preloader";
+import { RouteLoader } from "@/Components/RouteLoader";
+import { SiteNav } from "@/Components/SiteNav";
+import { SiteFooter } from "@/Components/SiteFooter";
+import { ScrollToTop } from "@/Components/ScrollToTop";
 
-export default function Layouts({ children }) {
+export default function SiteLayout({ children }) {
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 20);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
     return (
-        <>
-            <header>
-                <nav>
-                    <Link className="nav-link" href="/">
-                        Home
-                    </Link>
-                    <Link className="nav-link" href="posts/create">
-                        Create
-                    </Link>
-                </nav>
-            </header>
-            <main>{children}</main>
-        </>
+        <ThemeProvider>
+            <Preloader />
+            <RouteLoader />
+            <SiteNav scrolled={scrolled} />
+            <main className="min-h-screen">{children}</main>
+            <SiteFooter />
+            <ScrollToTop />
+        </ThemeProvider>
     );
 }
