@@ -9,6 +9,7 @@ use Database\Seeders\ProgramSeeder;
 use Database\Seeders\TrainerSeeder;
 use Database\Seeders\TestimonialSeeder;
 use Database\Seeders\FaqSeeder;
+use Database\Seeders\ClubLocationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             TrainerSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
+            ClubLocationSeeder::class,
         ]);
 
         // User::factory(10)->create();
