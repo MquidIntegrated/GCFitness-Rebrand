@@ -12,6 +12,7 @@ use Database\Seeders\FaqSeeder;
 use Database\Seeders\ClubLocationSeeder;
 use Database\Seeders\PartnerSeeder;
 use Database\Seeders\MembershipPlanSeeder;
+use Database\Seeders\StatSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             ClubLocationSeeder::class,
             PartnerSeeder::class,
             MembershipPlanSeeder::class,
+            StatSeeder::class,
         ]);
 
         // User::factory(10)->create();
