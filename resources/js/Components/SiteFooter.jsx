@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import { Camera, Video, MessageCircle, MapPin, Phone, Mail } from "lucide-react";
+import { Instagram, Youtube, Twitter, MapPin, Phone, Mail } from "lucide-react";
 
 export function SiteFooter() {
     return (
@@ -38,7 +38,7 @@ export function SiteFooter() {
                             A performance club for people who train with intent. Members only.
                         </p>
                         <div className="mt-6 flex gap-3">
-                            {[Camera, Video, MessageCircle].map((Icon, i) => (
+                            {[Instagram, Youtube, Twitter].map((Icon, i) => (
                                 <a
                                     key={i}
                                     href="#"
