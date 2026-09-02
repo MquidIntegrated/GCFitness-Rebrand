@@ -13,6 +13,7 @@ use Database\Seeders\ClubLocationSeeder;
 use Database\Seeders\PartnerSeeder;
 use Database\Seeders\MembershipPlanSeeder;
 use Database\Seeders\StatSeeder;
+use Database\Seeders\SiteSettingSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             PartnerSeeder::class,
             MembershipPlanSeeder::class,
             StatSeeder::class,
+            SiteSettingSeeder::class,
         ]);
 
         // User::factory(10)->create();
