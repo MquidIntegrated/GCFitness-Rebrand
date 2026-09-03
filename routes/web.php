@@ -24,7 +24,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth.admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     });
 });
