@@ -9,7 +9,7 @@ import { FaqItem } from "@/Components/FaqItem";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xaqrkzag";
 
-export default function Contact({ clubs, faqs, siteSetting }) {
+export default function Contact({ clubs, faqs, siteSetting = {} }) {
     const [sent, setSent] = useState(false);
     const [sending, setSending] = useState(false);
     const [error, setError] = useState(false);

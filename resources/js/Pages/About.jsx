@@ -188,7 +188,7 @@ export default function About({ trainers, stats, testimonials }) {
                                         <p className="text-sm text-muted-foreground">{t.specialty}</p>
                                         <p className="mt-4 text-sm leading-relaxed text-foreground/85">{t.bio}</p>
                                         <div className="mt-4 flex flex-wrap gap-2">
-                                            {t.certifications.map((c) => (
+                                            {(t.certifications ?? []).map((c) => (
                                                 <span
                                                     key={c}
                                                     className="rounded-full border border-border bg-foreground/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground"
