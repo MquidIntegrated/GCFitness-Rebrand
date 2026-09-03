@@ -65,6 +65,16 @@ function ResetPasswordPage({ token, email }) {
                         {errors.password}
                     </p>
                 )}
+                {errors.token && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.token}
+                    </p>
+                )}
+                {errors.email && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.email}
+                    </p>
+                )}
 
                 <Button type="submit" className="w-full" disabled={processing}>
                     {processing ? "Resetting…" : "Reset password"}

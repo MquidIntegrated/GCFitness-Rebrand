@@ -6,7 +6,7 @@ import { Label } from "@/Components/ui/label";
 
 function ForgotPasswordPage() {
     const { status } = usePage().props;
-    const { data, setData, post, processing } = useForm({ email: "" });
+    const { data, setData, post, processing, errors } = useForm({ email: "" });
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -50,6 +50,12 @@ function ForgotPasswordPage() {
                         onChange={(e) => setData("email", e.target.value)}
                     />
                 </div>
+
+                {errors.email && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.email}
+                    </p>
+                )}
 
                 <Button type="submit" className="w-full" disabled={processing}>
                     {processing ? "Sending…" : "Send reset link"}

@@ -17,14 +17,17 @@ Route::get('/contact', [ContactController::class, 'index']);
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login']);
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.attempt');
     Route::get('forgot-password', [AuthController::class, 'showForgotPassword'])->name('forgot-password');
-    Route::post('forgot-password', [AuthController::class, 'sendResetLink']);
+    Route::post('forgot-password', [AuthController::class, 'sendResetLink'])->middleware('throttle:5,1')->name('password.email');
     Route::get('reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
-    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
+    // Use 'auth.admin' (never the stock 'auth' alias) for any protected admin route —
+    // the default alias redirects to a route named 'login', which this app never
+    // registers (only 'admin.login'), so it would fail to redirect at all.
     Route::middleware('auth.admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     });
 });

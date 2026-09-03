@@ -1,4 +1,4 @@
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { AuthShell } from "@/Components/AuthShell";
@@ -8,6 +8,7 @@ import { Label } from "@/Components/ui/label";
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
+    const { status } = usePage().props;
     const { data, setData, post, processing, errors } = useForm({
         email: "",
         password: "",
@@ -29,6 +30,10 @@ function LoginPage() {
                         Sign in to manage your GCFitness website.
                     </p>
                 </div>
+
+                {status && (
+                    <p className="text-sm text-primary">{status}</p>
+                )}
 
                 <div className="space-y-2">
                     <Label htmlFor="email">Email address</Label>
@@ -83,6 +88,11 @@ function LoginPage() {
                 {errors.email && (
                     <p role="alert" className="text-sm text-destructive">
                         {errors.email}
+                    </p>
+                )}
+                {errors.password && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.password}
                     </p>
                 )}
 
