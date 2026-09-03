@@ -7,13 +7,12 @@ import { useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/Components/Reveal";
 import { CutoutImage } from "@/Components/CutoutImage";
+import { GYM_MASTER_URL } from "@/lib/external-links";
 
 import heroHome from "@/assets/hero-home.jpg";
 import aboutMission from "@/assets/about-mission.jpg";
 import stepTrackImg from "@/assets/gym-girl3.jpg";
 import statsImg from "@/assets/gym-girl1-removebg-preview.png";
-
-const GYM_MASTER_URL = "https://gcfitnesscentre.gymmasteronline.com/portal/login";
 
 export default function Home({ heroStats, partners, programs, trainers, impactStats, membershipPlans, testimonials }) {
     return (

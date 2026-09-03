@@ -7,8 +7,7 @@ import recoveryImg from "@/assets/membership-recovery.jpg";
 import { PageHero } from "@/Components/PageHero";
 import { Reveal } from "@/Components/Reveal";
 import { FaqItem } from "@/Components/FaqItem";
-
-const GYM_MASTER_URL = "https://gcfitnesscentre.gymmasteronline.com/portal/login";
+import { GYM_MASTER_URL } from "@/lib/external-links";
 
 const perks = [
     { icon: Snowflake, title: "Cryotherapy chamber", desc: "3-minute sessions at −140°C for accelerated recovery and inflammation reduction." },

@@ -2,9 +2,8 @@ import { Link, usePage } from "@inertiajs/react";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { GYM_MASTER_URL } from "@/lib/external-links";
 import { useTheme } from "./ThemeProvider";
-
-const GYM_MASTER_URL = "https://gcfitnesscentre.gymmasteronline.com/portal/login";
 
 const links = [
     { href: "/", label: "Home" },
