@@ -509,25 +509,19 @@ git commit -m "feat: add admin auth backend (session login, password reset, seed
 Ports `GC-Fitness-Rebrand/src/components/admin/auth/auth-shell.tsx` and `login-form.tsx`, combined into one Inertia page (the source splits shell/form/route across 3 files because TanStack Router's file-based routing and the form's router-independent unit-testability both required it; Inertia's per-page component model doesn't need that split). Changes from source: no router — `useForm`'s `post` replaces the raw `fetch`-based `authApi.login` call; validation errors arrive as Inertia's `errors` prop instead of a caught exception's message; the "Remember me" checkbox is wired to `useForm`'s data instead of being an uncontrolled native checkbox.
 
 **Files:**
+- Create: `resources/js/Components/AuthShell.jsx`
 - Create: `resources/js/Pages/Admin/Auth/Login.jsx`
 
 **Interfaces:**
 - Consumes: `Button`, `Input`, `Label` (Task 2); `admin.login` POST route (Task 3, path `/admin/login`).
-- Produces: the `/admin/login` page, rendered by `AuthController::showLogin`.
+- Produces: `AuthShell` from `@/Components/AuthShell` — a shared, self-contained layout consumed by this task's Login page and Task 5's ForgotPassword/ResetPassword pages (not by phase 1's public pages). The `/admin/login` page, rendered by `AuthController::showLogin`.
 
-- [ ] **Step 1: Create the page**
+- [ ] **Step 1: Create the shared auth shell**
 
-Create `resources/js/Pages/Admin/Auth/Login.jsx`:
+Port of `GC-Fitness-Rebrand/src/components/admin/auth/auth-shell.tsx`, no logic changes. Create `resources/js/Components/AuthShell.jsx`:
 
 ```jsx
-import { Head, useForm } from "@inertiajs/react";
-import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
-
-function AuthShell({ children }) {
+export function AuthShell({ children }) {
     return (
         <div className="flex min-h-screen">
             <div className="relative hidden w-[40%] shrink-0 items-center justify-center overflow-hidden bg-brand lg:flex">
@@ -545,6 +539,20 @@ function AuthShell({ children }) {
         </div>
     );
 }
+```
+
+- [ ] **Step 2: Create the login page**
+
+Create `resources/js/Pages/Admin/Auth/Login.jsx`:
+
+```jsx
+import { Head, useForm } from "@inertiajs/react";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { AuthShell } from "@/Components/AuthShell";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 
 function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -641,7 +649,7 @@ export default LoginPage;
 
 `LoginPage.layout = (page) => page` opts this page out of `app.jsx`'s default `SiteLayout` wrapper (the public nav/footer/preloader) — `AuthShell` here is a full self-contained layout, matching the source app's admin routes never wearing the marketing site's chrome.
 
-- [ ] **Step 2: Verify**
+- [ ] **Step 3: Verify**
 
 Start `php artisan serve` and `npm run dev`. Visit `/admin/login` via curl and confirm HTTP 200 with `"component":"Admin/Auth/Login"` in the Inertia payload.
 
@@ -649,10 +657,10 @@ Then submit the form with the seeded credentials (`admin@gcfitness.club` / `pass
 
 Then verify a wrong password: submit with an incorrect password and confirm the response is a redirect back to `/admin/login` with a validation error for `email` (check `storage/logs/laravel.log` shows no fatal errors, and re-fetching `/admin/login` shows the Inertia `errors` prop populated).
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add resources/js/Pages/Admin/Auth/Login.jsx
+git add resources/js/Components/AuthShell.jsx resources/js/Pages/Admin/Auth/Login.jsx
 git commit -m "feat: port admin login page"
 ```
 
@@ -667,7 +675,7 @@ Ports `forgot-password-form.tsx` and `reset-password-form.tsx`, each combined wi
 - Create: `resources/js/Pages/Admin/Auth/ResetPassword.jsx`
 
 **Interfaces:**
-- Consumes: `Button`, `Input`, `Label` (Task 2); `admin.forgot-password`/`admin.password.reset` POST routes (Task 3).
+- Consumes: `AuthShell` from `@/Components/AuthShell` (Task 4); `Button`, `Input`, `Label` (Task 2); `admin.forgot-password`/`admin.password.reset` POST routes (Task 3).
 - Produces: the `/admin/forgot-password` and `/admin/reset-password` pages.
 
 - [ ] **Step 1: Create the forgot-password page**
@@ -676,28 +684,10 @@ Create `resources/js/Pages/Admin/Auth/ForgotPassword.jsx`:
 
 ```jsx
 import { Head, useForm, usePage } from "@inertiajs/react";
+import { AuthShell } from "@/Components/AuthShell";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-
-function AuthShell({ children }) {
-    return (
-        <div className="flex min-h-screen">
-            <div className="relative hidden w-[40%] shrink-0 items-center justify-center overflow-hidden bg-brand lg:flex">
-                <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
-                <div className="relative text-center">
-                    <div className="font-hero text-4xl uppercase tracking-widest text-white">
-                        GC<span className="text-white/70">Fitness</span>
-                    </div>
-                    <p className="mt-3 text-sm text-white/80">Content Studio</p>
-                </div>
-            </div>
-            <div className="flex flex-1 items-center justify-center px-6 py-12">
-                <div className="w-full max-w-sm">{children}</div>
-            </div>
-        </div>
-    );
-}
 
 function ForgotPasswordPage() {
     const { status } = usePage().props;
@@ -771,28 +761,10 @@ Create `resources/js/Pages/Admin/Auth/ResetPassword.jsx`:
 
 ```jsx
 import { Head, useForm } from "@inertiajs/react";
+import { AuthShell } from "@/Components/AuthShell";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-
-function AuthShell({ children }) {
-    return (
-        <div className="flex min-h-screen">
-            <div className="relative hidden w-[40%] shrink-0 items-center justify-center overflow-hidden bg-brand lg:flex">
-                <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
-                <div className="relative text-center">
-                    <div className="font-hero text-4xl uppercase tracking-widest text-white">
-                        GC<span className="text-white/70">Fitness</span>
-                    </div>
-                    <p className="mt-3 text-sm text-white/80">Content Studio</p>
-                </div>
-            </div>
-            <div className="flex flex-1 items-center justify-center px-6 py-12">
-                <div className="w-full max-w-sm">{children}</div>
-            </div>
-        </div>
-    );
-}
 
 function ResetPasswordPage({ token, email }) {
     const { data, setData, post, processing, errors } = useForm({
