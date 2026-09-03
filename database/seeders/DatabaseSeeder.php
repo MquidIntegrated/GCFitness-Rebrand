@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             MembershipPlanSeeder::class,
             StatSeeder::class,
             SiteSettingSeeder::class,
+            AdminUserSeeder::class,
         ]);
 
         // User::factory(10)->create();
