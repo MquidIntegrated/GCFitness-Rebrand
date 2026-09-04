@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\ContactController;
@@ -37,5 +38,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('social-links', [SocialLinkController::class, 'store'])->name('social-links.store');
         Route::put('social-links/{socialLink}', [SocialLinkController::class, 'update'])->name('social-links.update');
         Route::delete('social-links/{socialLink}', [SocialLinkController::class, 'destroy'])->name('social-links.destroy');
+
+        Route::get('faqs', [FaqController::class, 'index'])->name('faqs.index');
+        Route::post('faqs', [FaqController::class, 'store'])->name('faqs.store');
+        Route::put('faqs/{faq}', [FaqController::class, 'update'])->name('faqs.update');
+        Route::delete('faqs/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
     });
 });
