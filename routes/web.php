@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -43,5 +44,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('faqs', [FaqController::class, 'store'])->name('faqs.store');
         Route::put('faqs/{faq}', [FaqController::class, 'update'])->name('faqs.update');
         Route::delete('faqs/{faq}', [FaqController::class, 'destroy'])->name('faqs.destroy');
+
+        Route::get('testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
+        Route::post('testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
+        Route::put('testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
+        Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
     });
 });
