@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UploadController;
@@ -49,5 +50,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('testimonials', [TestimonialController::class, 'store'])->name('testimonials.store');
         Route::put('testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
         Route::delete('testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
+
+        Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
+        Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
     });
 });
