@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
@@ -29,5 +30,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth.admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('uploads', [UploadController::class, 'store'])->name('uploads.store');
     });
 });
