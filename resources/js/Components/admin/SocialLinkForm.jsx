@@ -3,14 +3,17 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { ImageUpload } from "@/Components/admin/ImageUpload";
+import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
 export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
     const isEditing = Boolean(initialValues);
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, put, processing, errors, isDirty } = useForm({
         platform: initialValues?.platform ?? "",
         url: initialValues?.url ?? "",
         logo_path: initialValues?.logo_path ?? "",
     });
+
+    useUnsavedChangesGuard(isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();

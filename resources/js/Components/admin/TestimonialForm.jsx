@@ -4,15 +4,18 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Textarea } from "@/Components/ui/textarea";
+import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
 export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved, readOnly = false }) {
     const isEditing = Boolean(initialValues);
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, put, processing, errors, isDirty } = useForm({
         quote: initialValues?.quote ?? "",
         name: initialValues?.name ?? "",
         role: initialValues?.role ?? "",
         page: initialValues?.page ?? defaultPage,
     });
+
+    useUnsavedChangesGuard(readOnly ? false : isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();

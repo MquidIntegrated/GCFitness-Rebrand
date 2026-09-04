@@ -4,15 +4,18 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import AdminLayout from "@/Layouts/AdminLayout";
+import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
 function SiteSettingsPage({ settings }) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, put, processing, errors, isDirty } = useForm({
         address_line1: settings.address_line1 ?? "",
         address_line2: settings.address_line2 ?? "",
         phone: settings.phone ?? "",
         email: settings.email ?? "",
         hours: settings.hours ?? "",
     });
+
+    useUnsavedChangesGuard(isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
