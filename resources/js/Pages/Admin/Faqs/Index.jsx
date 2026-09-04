@@ -15,7 +15,7 @@ function FaqsPage({ faqs }) {
     const [viewing, setViewing] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    const visible = faqs.filter((f) => f.page === activePage);
+    const visible = faqs.filter((f) => (activePage === "contact" ? f.show_on_contact : f.show_on_membership));
 
     function closeDrawer() {
         setEditing(null);
@@ -25,7 +25,12 @@ function FaqsPage({ faqs }) {
     function handleDuplicate(faq) {
         router.post(
             "/admin/faqs",
-            { question: `${faq.question} (Copy)`, answer: faq.answer, page: faq.page },
+            {
+                question: `${faq.question} (Copy)`,
+                answer: faq.answer,
+                show_on_contact: faq.show_on_contact,
+                show_on_membership: faq.show_on_membership,
+            },
             {
                 onSuccess: () => toast.success("FAQ created."),
                 onError: () => toast.error("Something went wrong."),

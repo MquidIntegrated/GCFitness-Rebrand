@@ -15,7 +15,7 @@ function TestimonialsPage({ testimonials }) {
     const [viewing, setViewing] = useState(null);
     const [deleteTarget, setDeleteTarget] = useState(null);
 
-    const visible = testimonials.filter((t) => t.page === activePage);
+    const visible = testimonials.filter((t) => (activePage === "home" ? t.show_on_home : t.show_on_about));
 
     function closeDrawer() {
         setEditing(null);
@@ -25,7 +25,13 @@ function TestimonialsPage({ testimonials }) {
     function handleDuplicate(testimonial) {
         router.post(
             "/admin/testimonials",
-            { quote: testimonial.quote, name: `${testimonial.name} (Copy)`, role: testimonial.role, page: testimonial.page },
+            {
+                quote: testimonial.quote,
+                name: `${testimonial.name} (Copy)`,
+                role: testimonial.role,
+                show_on_home: testimonial.show_on_home,
+                show_on_about: testimonial.show_on_about,
+            },
             {
                 onSuccess: () => toast.success("Testimonial created."),
                 onError: () => toast.error("Something went wrong."),

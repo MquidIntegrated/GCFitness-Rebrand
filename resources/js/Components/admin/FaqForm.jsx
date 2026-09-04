@@ -1,8 +1,8 @@
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
+import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Textarea } from "@/Components/ui/textarea";
 import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
@@ -11,7 +11,8 @@ export function FaqForm({ initialValues, defaultPage, onCancel, onSaved, readOnl
     const { data, setData, post, put, processing, errors, isDirty } = useForm({
         question: initialValues?.question ?? "",
         answer: initialValues?.answer ?? "",
-        page: initialValues?.page ?? defaultPage,
+        show_on_contact: initialValues?.show_on_contact ?? defaultPage === "contact",
+        show_on_membership: initialValues?.show_on_membership ?? defaultPage === "membership",
     });
 
     useUnsavedChangesGuard(readOnly ? false : isDirty);
@@ -49,16 +50,36 @@ export function FaqForm({ initialValues, defaultPage, onCancel, onSaved, readOnl
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="page">Show on</Label>
-                <Select value={data.page} onValueChange={(value) => setData("page", value)} disabled={readOnly}>
-                    <SelectTrigger id="page">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="contact">Contact</SelectItem>
-                        <SelectItem value="membership">Membership</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Label>Show on</Label>
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="show_on_contact"
+                            checked={data.show_on_contact}
+                            disabled={readOnly}
+                            onCheckedChange={(checked) => setData("show_on_contact", checked === true)}
+                        />
+                        <Label htmlFor="show_on_contact" className="font-normal">
+                            Contact
+                        </Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="show_on_membership"
+                            checked={data.show_on_membership}
+                            disabled={readOnly}
+                            onCheckedChange={(checked) => setData("show_on_membership", checked === true)}
+                        />
+                        <Label htmlFor="show_on_membership" className="font-normal">
+                            Membership
+                        </Label>
+                    </div>
+                </div>
+                {errors.show_on_contact && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.show_on_contact}
+                    </p>
+                )}
             </div>
 
             <div className="flex justify-end gap-2 pt-2">

@@ -1,8 +1,8 @@
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
+import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select";
 import { Textarea } from "@/Components/ui/textarea";
 import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
@@ -12,7 +12,8 @@ export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved,
         quote: initialValues?.quote ?? "",
         name: initialValues?.name ?? "",
         role: initialValues?.role ?? "",
-        page: initialValues?.page ?? defaultPage,
+        show_on_home: initialValues?.show_on_home ?? defaultPage === "home",
+        show_on_about: initialValues?.show_on_about ?? defaultPage === "about",
     });
 
     useUnsavedChangesGuard(readOnly ? false : isDirty);
@@ -60,16 +61,36 @@ export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved,
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="page">Show on</Label>
-                <Select value={data.page} onValueChange={(value) => setData("page", value)} disabled={readOnly}>
-                    <SelectTrigger id="page">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="home">Home</SelectItem>
-                        <SelectItem value="about">About</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Label>Show on</Label>
+                <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="show_on_home"
+                            checked={data.show_on_home}
+                            disabled={readOnly}
+                            onCheckedChange={(checked) => setData("show_on_home", checked === true)}
+                        />
+                        <Label htmlFor="show_on_home" className="font-normal">
+                            Home
+                        </Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="show_on_about"
+                            checked={data.show_on_about}
+                            disabled={readOnly}
+                            onCheckedChange={(checked) => setData("show_on_about", checked === true)}
+                        />
+                        <Label htmlFor="show_on_about" className="font-normal">
+                            About
+                        </Label>
+                    </div>
+                </div>
+                {errors.show_on_home && (
+                    <p role="alert" className="text-sm text-destructive">
+                        {errors.show_on_home}
+                    </p>
+                )}
             </div>
 
             <div className="flex justify-end gap-2 pt-2">

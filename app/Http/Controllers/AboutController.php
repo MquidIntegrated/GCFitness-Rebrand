@@ -13,7 +13,7 @@ class AboutController extends Controller
         return inertia('About', [
             'trainers' => Trainer::orderBy('sort_order')->get(['name', 'specialty', 'years_experience', 'bio', 'certifications', 'image_path']),
             'stats' => Stat::where('page', 'about')->where('section', 'impact')->orderBy('sort_order')->get(['label', 'value']),
-            'testimonials' => Testimonial::where('page', 'about')->orderBy('sort_order')->get(['quote', 'name', 'role']),
+            'testimonials' => Testimonial::where('show_on_about', true)->orderBy('sort_order')->get(['quote', 'name', 'role']),
         ]);
     }
 }

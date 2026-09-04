@@ -20,7 +20,7 @@ class HomeController extends Controller
             'trainers' => Trainer::orderBy('sort_order')->get(['name', 'specialty', 'years_experience', 'image_path']),
             'impactStats' => Stat::where('page', 'home')->where('section', 'impact')->orderBy('sort_order')->get(['label', 'value', 'suffix']),
             'membershipPlans' => MembershipPlan::orderBy('sort_order')->get(['name', 'monthly_price', 'annual_price', 'popular', 'home_features']),
-            'testimonials' => Testimonial::where('page', 'home')->orderBy('sort_order')->get(['quote', 'name', 'role']),
+            'testimonials' => Testimonial::where('show_on_home', true)->orderBy('sort_order')->get(['quote', 'name', 'role']),
         ]);
     }
 }
