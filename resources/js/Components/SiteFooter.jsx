@@ -1,7 +1,9 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { Instagram, Youtube, Twitter, MapPin, Phone, Mail } from "lucide-react";
 
 export function SiteFooter() {
+    const { siteSetting = {} } = usePage().props;
+
     return (
         <footer className="relative overflow-hidden border-t border-border bg-surface">
             <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[70%] -translate-x-1/2 bg-brand-radial opacity-40 blur-3xl" />
@@ -75,15 +77,15 @@ export function SiteFooter() {
                         <ul className="mt-5 space-y-3 text-sm text-muted-foreground">
                             <li className="flex gap-3">
                                 <MapPin className="mt-0.5 size-4 shrink-0 text-brand" />
-                                <span>128 Mercer Street<br />New York, NY 10012</span>
+                                <span>{siteSetting.address_line1}<br />{siteSetting.address_line2}</span>
                             </li>
                             <li className="flex gap-3">
                                 <Phone className="mt-0.5 size-4 shrink-0 text-brand" />
-                                <span>+1 (212) 555-0142</span>
+                                <span>{siteSetting.phone}</span>
                             </li>
                             <li className="flex gap-3">
                                 <Mail className="mt-0.5 size-4 shrink-0 text-brand" />
-                                <span>hello@gcfitness.club</span>
+                                <span>{siteSetting.email}</span>
                             </li>
                         </ul>
                     </div>

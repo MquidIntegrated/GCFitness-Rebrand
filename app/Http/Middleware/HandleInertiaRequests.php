@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -45,6 +46,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => fn () => [
                 'user' => $request->user() ? ['name' => $request->user()->name] : null,
             ],
+            'siteSetting' => fn () => SiteSetting::first(['address_line1', 'address_line2', 'phone', 'email', 'hours']) ?? new SiteSetting(),
         ];
     }
 }
