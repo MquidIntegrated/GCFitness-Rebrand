@@ -1,8 +1,9 @@
 import { Link, usePage } from "@inertiajs/react";
-import { Instagram, Youtube, Twitter, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { BrandIcon } from "@/Components/BrandIcon";
 
 export function SiteFooter() {
-    const { siteSetting = {} } = usePage().props;
+    const { siteSetting = {}, socialLinks = [] } = usePage().props;
 
     return (
         <footer className="relative overflow-hidden border-t border-border bg-surface">
@@ -39,18 +40,22 @@ export function SiteFooter() {
                         <p className="mt-4 max-w-xs text-sm text-muted-foreground">
                             A performance club for people who train with intent. Members only.
                         </p>
-                        <div className="mt-6 flex gap-3">
-                            {[Instagram, Youtube, Twitter].map((Icon, i) => (
-                                <a
-                                    key={i}
-                                    href="#"
-                                    aria-label="Social"
-                                    className="grid size-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-brand hover:text-brand"
-                                >
-                                    <Icon className="size-4" />
-                                </a>
-                            ))}
-                        </div>
+                        {socialLinks.length > 0 && (
+                            <div className="mt-6 flex gap-3">
+                                {socialLinks.map((link) => (
+                                    <a
+                                        key={link.url}
+                                        href={link.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        aria-label={link.platform}
+                                        className="grid size-10 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-brand hover:text-brand"
+                                    >
+                                        <BrandIcon slug={link.icon_slug} className="size-4" />
+                                    </a>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <FooterCol

@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
-import { ImageUpload } from "@/Components/admin/ImageUpload";
+import { IconPicker } from "@/Components/admin/IconPicker";
 import { useUnsavedChangesGuard } from "@/hooks/useUnsavedChangesGuard";
 
 export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
@@ -11,9 +10,8 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
     const { data, setData, post, put, processing, errors, isDirty } = useForm({
         platform: initialValues?.platform ?? "",
         url: initialValues?.url ?? "",
-        logo_path: initialValues?.logo_path ?? "",
+        icon_slug: initialValues?.icon_slug ?? "",
     });
-    const [uploadingImage, setUploadingImage] = useState(false);
 
     useUnsavedChangesGuard(isDirty);
 
@@ -30,16 +28,11 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
     return (
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
-                <Label htmlFor="logo_path">Logo</Label>
-                <ImageUpload
-                    value={data.logo_path}
-                    onChange={(url) => setData("logo_path", url)}
-                    uploadType="social-link"
-                    onUploadingChange={setUploadingImage}
-                />
-                {errors.logo_path && (
+                <Label htmlFor="icon_slug">Icon</Label>
+                <IconPicker value={data.icon_slug} onChange={(slug) => setData("icon_slug", slug)} />
+                {errors.icon_slug && (
                     <p role="alert" className="text-sm text-destructive">
-                        {errors.logo_path}
+                        {errors.icon_slug}
                     </p>
                 )}
             </div>
@@ -68,7 +61,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
                 <Button type="button" variant="outline" onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button type="submit" disabled={processing || uploadingImage}>
+                <Button type="submit" disabled={processing}>
                     {processing ? "Saving…" : "Save"}
                 </Button>
             </div>

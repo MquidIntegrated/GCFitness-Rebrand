@@ -11,7 +11,7 @@ class SocialLinkController extends Controller
     public function index()
     {
         return inertia('Admin/SocialLinks/Index', [
-            'links' => SocialLink::orderBy('sort_order')->get(['id', 'platform', 'url', 'logo_path']),
+            'links' => SocialLink::orderBy('sort_order')->get(['id', 'platform', 'url', 'icon_slug']),
         ]);
     }
 
@@ -20,7 +20,7 @@ class SocialLinkController extends Controller
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:255'],
             'url' => ['required', 'url', 'max:255'],
-            'logo_path' => ['required', 'string', 'max:255'],
+            'icon_slug' => ['required', 'string', 'max:100'],
         ]);
 
         $nextOrder = (int) SocialLink::max('sort_order') + 1;
@@ -35,7 +35,7 @@ class SocialLinkController extends Controller
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:255'],
             'url' => ['required', 'url', 'max:255'],
-            'logo_path' => ['required', 'string', 'max:255'],
+            'icon_slug' => ['required', 'string', 'max:100'],
         ]);
 
         $socialLink->update($validated);
