@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -31,5 +32,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::post('uploads', [UploadController::class, 'store'])->name('uploads.store');
+
+        Route::get('social-links', [SocialLinkController::class, 'index'])->name('social-links.index');
+        Route::post('social-links', [SocialLinkController::class, 'store'])->name('social-links.store');
+        Route::put('social-links/{socialLink}', [SocialLinkController::class, 'update'])->name('social-links.update');
+        Route::delete('social-links/{socialLink}', [SocialLinkController::class, 'destroy'])->name('social-links.destroy');
     });
 });
