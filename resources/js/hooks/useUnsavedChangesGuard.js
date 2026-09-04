@@ -12,7 +12,8 @@ export function useUnsavedChangesGuard(isDirty) {
 
         window.addEventListener("beforeunload", handleBeforeUnload);
 
-        const removeInertiaListener = router.on("before", () => {
+        const removeInertiaListener = router.on("before", (event) => {
+            if (event.detail.visit.method !== "get") return;
             return window.confirm("You have unsaved changes. Leave without saving?");
         });
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -12,6 +13,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
         url: initialValues?.url ?? "",
         logo_path: initialValues?.logo_path ?? "",
     });
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     useUnsavedChangesGuard(isDirty);
 
@@ -29,7 +31,12 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
                 <Label htmlFor="logo_path">Logo</Label>
-                <ImageUpload value={data.logo_path} onChange={(url) => setData("logo_path", url)} uploadType="social-link" />
+                <ImageUpload
+                    value={data.logo_path}
+                    onChange={(url) => setData("logo_path", url)}
+                    uploadType="social-link"
+                    onUploadingChange={setUploadingImage}
+                />
                 {errors.logo_path && (
                     <p role="alert" className="text-sm text-destructive">
                         {errors.logo_path}
@@ -61,7 +68,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
                 <Button type="button" variant="outline" onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button type="submit" disabled={processing}>
+                <Button type="submit" disabled={processing || uploadingImage}>
                     {processing ? "Saving…" : "Save"}
                 </Button>
             </div>

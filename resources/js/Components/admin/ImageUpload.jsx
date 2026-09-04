@@ -7,15 +7,24 @@ function getXsrfToken() {
     return match ? decodeURIComponent(match[1]) : null;
 }
 
-export function ImageUpload({ value, onChange, uploadType, disabled = false }) {
+export function ImageUpload({ value, onChange, uploadType, disabled = false, onUploadingChange }) {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
+    const objectUrlRef = useRef(null);
+
+    function setUploadingState(next) {
+        setUploading(next);
+        onUploadingChange?.(next);
+    }
 
     async function handleFile(file) {
         setError(null);
-        onChange(URL.createObjectURL(file));
-        setUploading(true);
+        const previousValue = value;
+        const objectUrl = URL.createObjectURL(file);
+        objectUrlRef.current = objectUrl;
+        onChange(objectUrl);
+        setUploadingState(true);
         try {
             const formData = new FormData();
             formData.append("file", file);
@@ -35,8 +44,13 @@ export function ImageUpload({ value, onChange, uploadType, disabled = false }) {
             onChange(url);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
+            onChange(previousValue);
         } finally {
-            setUploading(false);
+            if (objectUrlRef.current === objectUrl) {
+                URL.revokeObjectURL(objectUrl);
+                objectUrlRef.current = null;
+            }
+            setUploadingState(false);
         }
     }
 

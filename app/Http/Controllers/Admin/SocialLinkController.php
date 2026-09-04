@@ -19,8 +19,8 @@ class SocialLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:255'],
-            'url' => ['required', 'url'],
-            'logo_path' => ['required', 'string'],
+            'url' => ['required', 'url', 'max:255'],
+            'logo_path' => ['required', 'string', 'max:255'],
         ]);
 
         $nextOrder = (int) SocialLink::max('sort_order') + 1;
@@ -34,8 +34,8 @@ class SocialLinkController extends Controller
     {
         $validated = $request->validate([
             'platform' => ['required', 'string', 'max:255'],
-            'url' => ['required', 'url'],
-            'logo_path' => ['required', 'string'],
+            'url' => ['required', 'url', 'max:255'],
+            'logo_path' => ['required', 'string', 'max:255'],
         ]);
 
         $socialLink->update($validated);
