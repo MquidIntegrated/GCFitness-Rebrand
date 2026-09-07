@@ -23,10 +23,10 @@ class FaqSeeder extends Seeder
         ];
 
         foreach ($membership as $i => $f) {
-            Faq::create($f + ['page' => 'membership', 'sort_order' => $i + 1]);
+            Faq::create($f + ['show_on_contact' => false, 'show_on_membership' => true, 'sort_order' => $i + 1]);
         }
         foreach ($contact as $i => $f) {
-            Faq::create($f + ['page' => 'contact', 'sort_order' => $i + 1]);
+            Faq::create($f + ['show_on_contact' => true, 'show_on_membership' => false, 'sort_order' => $i + 1]);
         }
     }
 }

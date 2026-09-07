@@ -22,10 +22,10 @@ class TestimonialSeeder extends Seeder
         ];
 
         foreach ($home as $i => $t) {
-            Testimonial::create($t + ['page' => 'home', 'sort_order' => $i + 1]);
+            Testimonial::create($t + ['show_on_home' => true, 'show_on_about' => false, 'sort_order' => $i + 1]);
         }
         foreach ($about as $i => $t) {
-            Testimonial::create($t + ['page' => 'about', 'sort_order' => $i + 1]);
+            Testimonial::create($t + ['show_on_home' => false, 'show_on_about' => true, 'sort_order' => $i + 1]);
         }
     }
 }
