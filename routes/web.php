@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\TestimonialController;
@@ -59,5 +60,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('partners', [PartnerController::class, 'store'])->name('partners.store');
         Route::put('partners/{partner}', [PartnerController::class, 'update'])->name('partners.update');
         Route::delete('partners/{partner}', [PartnerController::class, 'destroy'])->name('partners.destroy');
+
+        Route::get('programs', [ProgramController::class, 'index'])->name('programs.index');
+        Route::get('programs/create', [ProgramController::class, 'create'])->name('programs.create');
+        Route::post('programs', [ProgramController::class, 'store'])->name('programs.store');
+        Route::get('programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
+        Route::put('programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
+        Route::delete('programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
     });
 });
