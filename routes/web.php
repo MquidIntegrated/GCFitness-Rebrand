@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ClubLocationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\MembershipPlanController;
@@ -39,6 +40,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::post('uploads', [UploadController::class, 'store'])->name('uploads.store');
+
+        Route::get('locations', [ClubLocationController::class, 'index'])->name('locations.index');
+        Route::post('locations', [ClubLocationController::class, 'store'])->name('locations.store');
+        Route::put('locations/{location}', [ClubLocationController::class, 'update'])->name('locations.update');
+        Route::delete('locations/{location}', [ClubLocationController::class, 'destroy'])->name('locations.destroy');
 
         Route::get('social-links', [SocialLinkController::class, 'index'])->name('social-links.index');
         Route::post('social-links', [SocialLinkController::class, 'store'])->name('social-links.store');

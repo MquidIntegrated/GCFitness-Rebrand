@@ -1,4 +1,4 @@
-import { Dumbbell, Users, CreditCard, MessageSquareQuote, HelpCircle, Handshake, Settings, Share2 } from "lucide-react";
+import { Dumbbell, Users, CreditCard, MessageSquareQuote, HelpCircle, MapPin, Handshake, Settings, Share2 } from "lucide-react";
 
 export const CONTENT_NAV_ITEMS = [
     { to: "/admin/programs", label: "Programs", icon: Dumbbell },
@@ -9,6 +9,7 @@ export const CONTENT_NAV_ITEMS = [
 ];
 
 export const SITE_INFO_NAV_ITEMS = [
+    { to: "/admin/locations", label: "Club Locations", icon: MapPin },
     { to: "/admin/partners", label: "Trusted Partners", icon: Handshake },
     { to: "/admin/site-settings", label: "Site Settings", icon: Settings },
     { to: "/admin/social-links", label: "Social Links", icon: Share2 },
