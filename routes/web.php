@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
@@ -67,5 +68,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
         Route::put('programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
         Route::delete('programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
+
+        Route::get('trainers', [TrainerController::class, 'index'])->name('trainers.index');
+        Route::get('trainers/create', [TrainerController::class, 'create'])->name('trainers.create');
+        Route::post('trainers', [TrainerController::class, 'store'])->name('trainers.store');
+        Route::get('trainers/{trainer}/edit', [TrainerController::class, 'edit'])->name('trainers.edit');
+        Route::put('trainers/{trainer}', [TrainerController::class, 'update'])->name('trainers.update');
+        Route::delete('trainers/{trainer}', [TrainerController::class, 'destroy'])->name('trainers.destroy');
     });
 });
