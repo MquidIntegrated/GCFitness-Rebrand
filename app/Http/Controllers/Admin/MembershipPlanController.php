@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MembershipPlan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MembershipPlanController extends Controller
 {
@@ -59,13 +60,15 @@ class MembershipPlanController extends Controller
     public function reorder(Request $request)
     {
         $validated = $request->validate([
-            'ids' => ['required', 'array'],
-            'ids.*' => ['integer', 'exists:membership_plans,id'],
+            'ids' => ['required', 'array', 'size:' . MembershipPlan::count()],
+            'ids.*' => ['integer', 'distinct', 'exists:membership_plans,id'],
         ]);
 
-        foreach ($validated['ids'] as $index => $id) {
-            MembershipPlan::where('id', $id)->update(['sort_order' => $index + 1]);
-        }
+        DB::transaction(function () use ($validated) {
+            foreach ($validated['ids'] as $index => $id) {
+                MembershipPlan::where('id', $id)->update(['sort_order' => $index + 1]);
+            }
+        });
 
         return back();
     }
