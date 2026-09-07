@@ -26,7 +26,7 @@ export function getBreadcrumbSegments(pathname, search) {
         const lastPathSegment = remainder.split("/").pop();
 
         let label;
-        if (lastPathSegment === "new") {
+        if (lastPathSegment === "create") {
             label = "Add";
         } else if (search.mode === "view") {
             label = "View";
