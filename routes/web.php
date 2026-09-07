@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\MembershipPlanController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\SiteSettingController;
@@ -75,5 +76,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('trainers/{trainer}/edit', [TrainerController::class, 'edit'])->name('trainers.edit');
         Route::put('trainers/{trainer}', [TrainerController::class, 'update'])->name('trainers.update');
         Route::delete('trainers/{trainer}', [TrainerController::class, 'destroy'])->name('trainers.destroy');
+
+        Route::get('membership-plans', [MembershipPlanController::class, 'index'])->name('membership-plans.index');
+        Route::get('membership-plans/create', [MembershipPlanController::class, 'create'])->name('membership-plans.create');
+        Route::post('membership-plans', [MembershipPlanController::class, 'store'])->name('membership-plans.store');
+        Route::get('membership-plans/{membershipPlan}/edit', [MembershipPlanController::class, 'edit'])->name('membership-plans.edit');
+        Route::put('membership-plans/{membershipPlan}', [MembershipPlanController::class, 'update'])->name('membership-plans.update');
+        Route::delete('membership-plans/{membershipPlan}', [MembershipPlanController::class, 'destroy'])->name('membership-plans.destroy');
     });
 });
