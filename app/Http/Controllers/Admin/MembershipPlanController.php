@@ -56,6 +56,20 @@ class MembershipPlanController extends Controller
         return back();
     }
 
+    public function reorder(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:membership_plans,id'],
+        ]);
+
+        foreach ($validated['ids'] as $index => $id) {
+            MembershipPlan::where('id', $id)->update(['sort_order' => $index + 1]);
+        }
+
+        return back();
+    }
+
     private function validated(Request $request): array
     {
         return $request->validate([

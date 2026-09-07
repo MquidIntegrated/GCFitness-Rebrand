@@ -18,6 +18,17 @@ function MembershipPlansPage({ plans }) {
         });
     }
 
+    function handleReorder(orderedIds) {
+        router.patch(
+            "/admin/membership-plans/reorder",
+            { ids: orderedIds },
+            {
+                preserveScroll: true,
+                onError: () => toast.error("Something went wrong."),
+            },
+        );
+    }
+
     return (
         <>
             <Head title="Membership Plans — GCFitness Admin" />
@@ -29,7 +40,7 @@ function MembershipPlansPage({ plans }) {
                     </Button>
                 </div>
 
-                <MembershipPlanList plans={plans} onDeleteRequest={setDeleteTarget} />
+                <MembershipPlanList plans={plans} onDeleteRequest={setDeleteTarget} onReorder={handleReorder} />
 
                 <DeleteConfirmDialog
                     open={deleteTarget !== null}

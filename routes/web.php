@@ -86,6 +86,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('membership-plans', [MembershipPlanController::class, 'index'])->name('membership-plans.index');
         Route::get('membership-plans/create', [MembershipPlanController::class, 'create'])->name('membership-plans.create');
         Route::post('membership-plans', [MembershipPlanController::class, 'store'])->name('membership-plans.store');
+        Route::patch('membership-plans/reorder', [MembershipPlanController::class, 'reorder'])->name('membership-plans.reorder');
         Route::get('membership-plans/{membershipPlan}/edit', [MembershipPlanController::class, 'edit'])->name('membership-plans.edit');
         Route::put('membership-plans/{membershipPlan}', [MembershipPlanController::class, 'update'])->name('membership-plans.update');
         Route::delete('membership-plans/{membershipPlan}', [MembershipPlanController::class, 'destroy'])->name('membership-plans.destroy');
