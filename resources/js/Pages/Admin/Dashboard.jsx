@@ -1,15 +1,19 @@
 import { Head } from "@inertiajs/react";
 import AdminLayout from "@/Layouts/AdminLayout";
+import { DashboardGreeting } from "@/Components/admin/DashboardGreeting";
+import { DashboardOverviewCards } from "@/Components/admin/DashboardOverviewCards";
+import { DashboardActivityChart } from "@/Components/admin/DashboardActivityChart";
+import { DashboardRecentActivityList } from "@/Components/admin/DashboardRecentActivityList";
 
-function DashboardPage() {
+function DashboardPage({ counts, recentActivity, activityByDay }) {
     return (
         <>
             <Head title="Dashboard — GCFitness Admin" />
-            <div>
-                <h1 className="text-2xl font-semibold">Welcome back</h1>
-                <p className="mt-2 text-sm text-muted-foreground">
-                    The full dashboard (stats, activity, charts) is built in a later phase-2 plan.
-                </p>
+            <div className="space-y-8">
+                <DashboardGreeting />
+                <DashboardOverviewCards counts={counts} />
+                <DashboardActivityChart data={activityByDay} />
+                <DashboardRecentActivityList activity={recentActivity} />
             </div>
         </>
     );
