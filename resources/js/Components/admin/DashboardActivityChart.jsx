@@ -18,7 +18,7 @@ function formatDayLabel(isoDate) {
 export function DashboardActivityChart({ data }) {
     return (
         <div>
-            <h2 className="text-sm font-medium text-muted-foreground">Edit activity (last 14 days)</h2>
+            <h2 className="text-sm font-medium text-muted-foreground">Content last edited (last 14 days)</h2>
             <ChartContainer config={CHART_CONFIG} className="mt-2 aspect-auto h-64 w-full">
                 <BarChart data={data} margin={{ left: -20 }}>
                     <CartesianGrid vertical={false} />

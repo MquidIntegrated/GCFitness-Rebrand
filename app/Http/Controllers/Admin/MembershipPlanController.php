@@ -65,9 +65,11 @@ class MembershipPlanController extends Controller
         ]);
 
         DB::transaction(function () use ($validated) {
-            foreach ($validated['ids'] as $index => $id) {
-                MembershipPlan::where('id', $id)->update(['sort_order' => $index + 1]);
-            }
+            MembershipPlan::withoutTimestamps(function () use ($validated) {
+                foreach ($validated['ids'] as $index => $id) {
+                    MembershipPlan::where('id', $id)->update(['sort_order' => $index + 1]);
+                }
+            });
         });
 
         return back();
