@@ -45,7 +45,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'status' => fn() => $request->session()->get('status'),
             'auth' => fn () => [
-                'user' => $request->user() ? ['name' => $request->user()->name] : null,
+                'user' => $request->user() ? ['name' => $request->user()->name, 'role' => $request->user()->role] : null,
             ],
             'siteSetting' => fn () => SiteSetting::first(['address_line1', 'address_line2', 'phone', 'email', 'hours']) ?? new SiteSetting(),
             'socialLinks' => fn () => SocialLink::orderBy('sort_order')->get(['url', 'icon_slug', 'platform']),

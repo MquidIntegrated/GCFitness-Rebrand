@@ -70,20 +70,15 @@ function LoginPage() {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
-                    <label className="flex items-center gap-2">
-                        <input
-                            type="checkbox"
-                            checked={data.remember}
-                            onChange={(e) => setData("remember", e.target.checked)}
-                            className="size-4 rounded border-input"
-                        />
-                        Remember me
-                    </label>
-                    <a href="/admin/forgot-password" className="font-medium text-primary hover:underline">
-                        Forgot password?
-                    </a>
-                </div>
+                <label className="flex items-center gap-2 text-sm">
+                    <input
+                        type="checkbox"
+                        checked={data.remember}
+                        onChange={(e) => setData("remember", e.target.checked)}
+                        className="size-4 rounded border-input"
+                    />
+                    Remember me
+                </label>
 
                 {errors.email && (
                     <p role="alert" className="text-sm text-destructive">

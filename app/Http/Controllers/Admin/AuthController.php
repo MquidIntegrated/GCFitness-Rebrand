@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -25,12 +23,20 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        $authenticated = $user
+            && $user->is_active
+            && (Hash::check($credentials['password'], $user->password)
+                || $user->hasValidTemporaryPassword($credentials['password']));
+
+        if (! $authenticated) {
             throw ValidationException::withMessages([
                 'email' => 'Invalid email or password. Please try again.',
             ]);
         }
 
+        Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');
@@ -45,50 +51,21 @@ class AuthController extends Controller
         return redirect()->route('admin.login');
     }
 
-    public function showForgotPassword()
+    public function showSetPassword()
     {
-        return inertia('Admin/Auth/ForgotPassword');
+        return inertia('Admin/Auth/SetPassword');
     }
 
-    public function sendResetLink(Request $request)
-    {
-        $request->validate(['email' => ['required', 'email']]);
-
-        Password::sendResetLink($request->only('email'));
-
-        return back()->with('status', "If that email has an account, we've sent a link to reset the password.");
-    }
-
-    public function showResetPassword(Request $request)
-    {
-        return inertia('Admin/Auth/ResetPassword', [
-            'token' => $request->query('token', ''),
-            'email' => $request->query('email', ''),
-        ]);
-    }
-
-    public function resetPassword(Request $request)
+    public function setPassword(Request $request)
     {
         $validated = $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
-        $status = Password::reset(
-            $validated,
-            function (User $user, string $password) {
-                $user->forceFill(['password' => Hash::make($password)])->save();
-                event(new PasswordReset($user));
-            }
-        );
+        $user = $request->user();
+        $user->forceFill(['password' => Hash::make($validated['password'])])->save();
+        $user->clearTemporaryPassword();
 
-        if ($status !== Password::PASSWORD_RESET) {
-            throw ValidationException::withMessages([
-                'password' => __($status),
-            ]);
-        }
-
-        return redirect()->route('admin.login')->with('status', 'Your password has been reset. You can now sign in.');
+        return redirect()->route('admin.dashboard');
     }
 }

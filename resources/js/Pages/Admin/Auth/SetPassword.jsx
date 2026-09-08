@@ -4,31 +4,26 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 
-function ResetPasswordPage({ token, email }) {
+function SetPasswordPage() {
     const { data, setData, post, processing, errors } = useForm({
-        token,
-        email,
         password: "",
         password_confirmation: "",
     });
 
     function handleSubmit(e) {
         e.preventDefault();
-        if (data.password !== data.password_confirmation) {
-            return;
-        }
-        post("/admin/reset-password");
+        post("/admin/set-password");
     }
-
-    const mismatch = data.password_confirmation.length > 0 && data.password !== data.password_confirmation;
 
     return (
         <AuthShell>
-            <Head title="Reset Password — GCFitness Admin" />
+            <Head title="Set New Password — GCFitness Admin" />
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">Reset your password</h1>
-                    <p className="mt-1 text-sm text-muted-foreground">Choose a new password below.</p>
+                    <h1 className="text-2xl font-semibold">Set a new password</h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        You're signing in with a temporary password. Choose a permanent password to continue.
+                    </p>
                 </div>
 
                 <div className="space-y-2">
@@ -55,35 +50,20 @@ function ResetPasswordPage({ token, email }) {
                     />
                 </div>
 
-                {mismatch && (
-                    <p role="alert" className="text-sm text-destructive">
-                        Passwords do not match.
-                    </p>
-                )}
                 {errors.password && (
                     <p role="alert" className="text-sm text-destructive">
                         {errors.password}
                     </p>
                 )}
-                {errors.token && (
-                    <p role="alert" className="text-sm text-destructive">
-                        {errors.token}
-                    </p>
-                )}
-                {errors.email && (
-                    <p role="alert" className="text-sm text-destructive">
-                        {errors.email}
-                    </p>
-                )}
 
                 <Button type="submit" className="w-full" disabled={processing}>
-                    {processing ? "Resetting…" : "Reset password"}
+                    {processing ? "Saving…" : "Set password and continue"}
                 </Button>
             </form>
         </AuthShell>
     );
 }
 
-ResetPasswordPage.layout = (page) => page;
+SetPasswordPage.layout = (page) => page;
 
-export default ResetPasswordPage;
+export default SetPasswordPage;
