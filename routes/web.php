@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ClubLocationController;
@@ -45,6 +46,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('admins/{admin}/reactivate', [AdminAccountController::class, 'reactivate'])->name('admins.reactivate');
             Route::delete('admins/{admin}', [AdminAccountController::class, 'destroy'])->name('admins.destroy');
         });
+
+        Route::get('account/password', [AccountController::class, 'showChangePassword'])->name('account.password.edit');
+        Route::post('account/password', [AccountController::class, 'changePassword'])->name('account.password.update');
 
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');

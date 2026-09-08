@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Link, usePage, router } from "@inertiajs/react";
-import { LayoutDashboard, Sun, Moon, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Sun, Moon, LogOut, ExternalLink, KeyRound } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -137,6 +137,12 @@ export function AdminShell({ children }) {
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent side="top" align="start" className="w-56">
+                            <DropdownMenuItem asChild>
+                                <Link href="/admin/account/password">
+                                    <KeyRound className="mr-2 size-4" />
+                                    Change password
+                                </Link>
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleLogout}>
                                 <LogOut className="mr-2 size-4" />
                                 Log out
