@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ClubLocationController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -35,6 +36,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth.admin', 'password.current'])->group(function () {
         Route::get('set-password', [AuthController::class, 'showSetPassword'])->name('password.set');
         Route::post('set-password', [AuthController::class, 'setPassword'])->name('password.set.update');
+
+        Route::middleware('role.super_admin')->group(function () {
+            Route::get('admins', [AdminAccountController::class, 'index'])->name('admins.index');
+            Route::post('admins', [AdminAccountController::class, 'store'])->name('admins.store');
+            Route::post('admins/{admin}/reset-access', [AdminAccountController::class, 'resetAccess'])->name('admins.reset-access');
+            Route::post('admins/{admin}/deactivate', [AdminAccountController::class, 'deactivate'])->name('admins.deactivate');
+            Route::post('admins/{admin}/reactivate', [AdminAccountController::class, 'reactivate'])->name('admins.reactivate');
+            Route::delete('admins/{admin}', [AdminAccountController::class, 'destroy'])->name('admins.destroy');
+        });
+
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
         Route::post('uploads', [UploadController::class, 'store'])->name('uploads.store');

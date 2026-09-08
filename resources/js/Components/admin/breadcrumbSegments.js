@@ -1,9 +1,9 @@
-import { CONTENT_NAV_ITEMS, SITE_INFO_NAV_ITEMS } from "./adminNavItems";
+import { CONTENT_NAV_ITEMS, SITE_INFO_NAV_ITEMS, SUPER_ADMIN_NAV_ITEMS } from "./adminNavItems";
 
 const DASHBOARD_PATH = "/admin/dashboard";
 const DASHBOARD_LABEL = "Dashboard";
 
-const ALL_NAV_ITEMS = [...CONTENT_NAV_ITEMS, ...SITE_INFO_NAV_ITEMS];
+const ALL_NAV_ITEMS = [...CONTENT_NAV_ITEMS, ...SITE_INFO_NAV_ITEMS, ...SUPER_ADMIN_NAV_ITEMS];
 
 export function getBreadcrumbSegments(pathname, search) {
     if (pathname === DASHBOARD_PATH) {

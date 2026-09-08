@@ -28,7 +28,7 @@ import {
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
 import { useTheme } from "@/Components/ThemeProvider";
-import { CONTENT_NAV_ITEMS, SITE_INFO_NAV_ITEMS } from "./adminNavItems";
+import { CONTENT_NAV_ITEMS, SITE_INFO_NAV_ITEMS, SUPER_ADMIN_NAV_ITEMS } from "./adminNavItems";
 import { getBreadcrumbSegments } from "./breadcrumbSegments";
 
 export function AdminShell({ children }) {
@@ -104,6 +104,26 @@ export function AdminShell({ children }) {
                             </SidebarMenu>
                         </SidebarGroupContent>
                     </SidebarGroup>
+
+                    {props.auth?.user?.role === "super_admin" && (
+                        <SidebarGroup>
+                            <SidebarGroupLabel>Administration</SidebarGroupLabel>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {SUPER_ADMIN_NAV_ITEMS.map((item) => (
+                                        <SidebarMenuItem key={item.to}>
+                                            <SidebarMenuButton asChild isActive={pathname.startsWith(item.to)}>
+                                                <Link href={item.to}>
+                                                    <item.icon />
+                                                    <span>{item.label}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </SidebarGroup>
+                    )}
                 </SidebarContent>
 
                 <SidebarFooter>
