@@ -12,7 +12,7 @@ class AdminUserSeeder extends Seeder
     {
         User::updateOrCreate(
             ['email' => 'admin@gcfitness.club'],
-            ['name' => 'GCFitness Admin', 'password' => Hash::make('password')]
+            ['name' => 'GCFitness Admin', 'password' => Hash::make('password'), 'role' => 'super_admin']
         );
     }
 }
