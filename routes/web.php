@@ -34,7 +34,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Use 'auth.admin' (never the stock 'auth' alias) for any protected admin route —
     // the default alias redirects to a route named 'login', which this app never
     // registers (only 'admin.login'), so it would fail to redirect at all.
-    Route::middleware(['auth.admin', 'password.current'])->group(function () {
+    Route::middleware(['auth.admin', 'account.active', 'password.current'])->group(function () {
         Route::get('set-password', [AuthController::class, 'showSetPassword'])->name('password.set');
         Route::post('set-password', [AuthController::class, 'setPassword'])->name('password.set.update');
 

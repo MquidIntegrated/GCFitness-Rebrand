@@ -40,6 +40,9 @@ class AdminAccountController extends Controller
         abort_if($admin->isSuperAdmin(), 403);
 
         $tempPassword = $admin->issueTemporaryPassword();
+        $admin->forceFill(['remember_token' => null])->save();
+
+        DB::table('sessions')->where('user_id', $admin->id)->delete();
 
         return back()->with('tempPassword', $tempPassword);
     }
@@ -49,6 +52,7 @@ class AdminAccountController extends Controller
         abort_if($admin->isSuperAdmin(), 403);
 
         $admin->update(['is_active' => false]);
+        $admin->forceFill(['remember_token' => null])->save();
 
         DB::table('sessions')->where('user_id', $admin->id)->delete();
 

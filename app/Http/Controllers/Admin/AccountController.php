@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -30,6 +31,9 @@ class AccountController extends Controller
         }
 
         $user->forceFill(['password' => Hash::make($validated['password'])])->save();
+
+        DB::table('sessions')->where('user_id', $user->id)->where('id', '!=', $request->session()->getId())->delete();
+        $request->session()->regenerate();
 
         return back()->with('message', 'Your password has been updated.');
     }

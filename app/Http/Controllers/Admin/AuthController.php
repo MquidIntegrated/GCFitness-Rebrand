@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Timebox;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -25,10 +27,12 @@ class AuthController extends Controller
 
         $user = User::where('email', $credentials['email'])->first();
 
-        $authenticated = $user
-            && $user->is_active
-            && (Hash::check($credentials['password'], $user->password)
-                || $user->hasValidTemporaryPassword($credentials['password']));
+        $authenticated = app(Timebox::class)->call(function () use ($user, $credentials) {
+            return $user
+                && $user->is_active
+                && (Hash::check($credentials['password'], $user->password)
+                    || $user->hasValidTemporaryPassword($credentials['password']));
+        }, 200000);
 
         if (! $authenticated) {
             throw ValidationException::withMessages([
@@ -58,6 +62,8 @@ class AuthController extends Controller
 
     public function setPassword(Request $request)
     {
+        abort_unless($request->user()->must_change_password, 403);
+
         $validated = $request->validate([
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
@@ -65,6 +71,9 @@ class AuthController extends Controller
         $user = $request->user();
         $user->forceFill(['password' => Hash::make($validated['password'])])->save();
         $user->clearTemporaryPassword();
+
+        DB::table('sessions')->where('user_id', $user->id)->where('id', '!=', $request->session()->getId())->delete();
+        $request->session()->regenerate();
 
         return redirect()->route('admin.dashboard');
     }
