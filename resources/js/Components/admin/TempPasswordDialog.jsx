@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
@@ -6,9 +6,17 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 export function TempPasswordDialog({ password, onOpenChange }) {
     const [copied, setCopied] = useState(false);
 
+    useEffect(() => {
+        setCopied(false);
+    }, [password]);
+
     async function handleCopy() {
-        await navigator.clipboard.writeText(password);
-        setCopied(true);
+        try {
+            await navigator.clipboard.writeText(password);
+            setCopied(true);
+        } catch {
+            setCopied(false);
+        }
     }
 
     return (

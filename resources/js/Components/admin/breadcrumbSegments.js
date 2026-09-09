@@ -2,12 +2,18 @@ import { CONTENT_NAV_ITEMS, SITE_INFO_NAV_ITEMS, SUPER_ADMIN_NAV_ITEMS } from ".
 
 const DASHBOARD_PATH = "/admin/dashboard";
 const DASHBOARD_LABEL = "Dashboard";
+const ACCOUNT_PASSWORD_PATH = "/admin/account/password";
+const ACCOUNT_PASSWORD_LABEL = "Change Password";
 
 const ALL_NAV_ITEMS = [...CONTENT_NAV_ITEMS, ...SITE_INFO_NAV_ITEMS, ...SUPER_ADMIN_NAV_ITEMS];
 
 export function getBreadcrumbSegments(pathname, search) {
     if (pathname === DASHBOARD_PATH) {
         return [{ label: DASHBOARD_LABEL, to: DASHBOARD_PATH }];
+    }
+
+    if (pathname === ACCOUNT_PASSWORD_PATH) {
+        return [{ label: DASHBOARD_LABEL, to: DASHBOARD_PATH }, { label: ACCOUNT_PASSWORD_LABEL }];
     }
 
     const segments = [{ label: DASHBOARD_LABEL, to: DASHBOARD_PATH }];

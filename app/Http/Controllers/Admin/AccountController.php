@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class AccountController extends Controller
@@ -19,7 +20,7 @@ class AccountController extends Controller
     {
         $validated = $request->validate([
             'current_password' => ['required'],
-            'password' => ['required', 'confirmed', 'min:8'],
+            'password' => ['required', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
 
         $user = $request->user();
@@ -30,7 +31,13 @@ class AccountController extends Controller
             ]);
         }
 
-        $user->forceFill(['password' => Hash::make($validated['password'])])->save();
+        if (Hash::check($validated['password'], $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => 'Please choose a password different from your current one.',
+            ]);
+        }
+
+        $user->forceFill(['password' => $validated['password']])->save();
 
         DB::table('sessions')->where('user_id', $user->id)->where('id', '!=', $request->session()->getId())->delete();
         $request->session()->regenerate();
