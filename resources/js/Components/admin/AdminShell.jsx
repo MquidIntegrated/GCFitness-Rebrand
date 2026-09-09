@@ -47,9 +47,9 @@ export function AdminShell({ children }) {
         <SidebarProvider>
             <Sidebar collapsible="icon">
                 <SidebarHeader>
-                    <div className="flex items-center gap-2 px-2 py-1">
+                    <div className="flex items-center gap-2 px-2 py-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
                         <span className="font-hero text-lg uppercase tracking-widest text-brand">GC</span>
-                        <span className="text-sm font-medium text-muted-foreground">Fitness CMS</span>
+                        <span className="text-sm font-medium text-muted-foreground group-data-[collapsible=icon]:hidden">Fitness CMS</span>
                     </div>
                 </SidebarHeader>
 
