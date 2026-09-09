@@ -44,6 +44,7 @@ export function TrainerForm({ initialValues, onCancel, onSaved, readOnly = false
             <div className="space-y-2">
                 <Label htmlFor="image_path">Image</Label>
                 <ImageUpload
+                    id="image_path"
                     value={data.image_path}
                     onChange={(url) => setData("image_path", url)}
                     uploadType="trainer"
@@ -119,7 +120,7 @@ export function TrainerForm({ initialValues, onCancel, onSaved, readOnly = false
                 )}
             </div>
 
-            <div className="fixed inset-x-0 bottom-0 flex justify-end gap-2 border-t border-border bg-background p-4">
+            <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border bg-background p-4">
                 {readOnly ? (
                     <Button type="button" variant="outline" onClick={onCancel}>
                         Back

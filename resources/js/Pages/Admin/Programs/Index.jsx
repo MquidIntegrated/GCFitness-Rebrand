@@ -24,7 +24,7 @@ function ProgramsPage({ programs }) {
             },
             {
                 onSuccess: () => toast.success("Program created."),
-                onError: () => toast.error("Something went wrong."),
+                onError: (errors) => toast.error(Object.values(errors)[0] ?? "Something went wrong."),
             },
         );
     }

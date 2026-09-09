@@ -105,7 +105,7 @@ export function MembershipPlanForm({ initialValues, onCancel, onSaved }) {
                 <Label htmlFor="popular">Mark as &quot;Most popular&quot;</Label>
             </div>
 
-            <div className="fixed inset-x-0 bottom-0 flex justify-end gap-2 border-t border-border bg-background p-4">
+            <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border bg-background p-4">
                 <Button type="button" variant="outline" onClick={onCancel}>
                     Cancel
                 </Button>

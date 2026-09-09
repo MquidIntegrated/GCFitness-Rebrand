@@ -67,8 +67,8 @@ class ProgramController extends Controller
             'tag' => ['required', 'string', 'max:255'],
             'duration' => ['required', 'string', 'max:255'],
             'level' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'home_description' => ['required', 'string'],
+            'description' => ['required', 'string', 'max:5000'],
+            'home_description' => ['required', 'string', 'max:1000'],
             'image_path' => ['required', 'string', 'max:255'],
             'featured' => ['required', 'boolean'],
         ]);

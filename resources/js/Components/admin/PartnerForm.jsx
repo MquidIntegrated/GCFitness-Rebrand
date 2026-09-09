@@ -31,6 +31,7 @@ export function PartnerForm({ initialValues, onCancel, onSaved }) {
             <div className="space-y-2">
                 <Label htmlFor="logo_path">Logo</Label>
                 <ImageUpload
+                    id="logo_path"
                     value={data.logo_path}
                     onChange={(url) => setData("logo_path", url)}
                     uploadType="partner"

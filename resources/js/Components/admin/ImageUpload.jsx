@@ -7,11 +7,12 @@ function getXsrfToken() {
     return match ? decodeURIComponent(match[1]) : null;
 }
 
-export function ImageUpload({ value, onChange, uploadType, disabled = false, onUploadingChange }) {
+export function ImageUpload({ id, value, onChange, uploadType, disabled = false, onUploadingChange }) {
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
     const objectUrlRef = useRef(null);
+    const requestIdRef = useRef(0);
 
     function setUploadingState(next) {
         setUploading(next);
@@ -21,6 +22,14 @@ export function ImageUpload({ value, onChange, uploadType, disabled = false, onU
     async function handleFile(file) {
         setError(null);
         const previousValue = value;
+        const requestId = ++requestIdRef.current;
+
+        // A new selection always supersedes whatever preview came before it —
+        // revoke it immediately rather than waiting for its own upload to
+        // finish (which may never happen if it's abandoned mid-flight).
+        if (objectUrlRef.current) {
+            URL.revokeObjectURL(objectUrlRef.current);
+        }
         const objectUrl = URL.createObjectURL(file);
         objectUrlRef.current = objectUrl;
         onChange(objectUrl);
@@ -41,16 +50,25 @@ export function ImageUpload({ value, onChange, uploadType, disabled = false, onU
                 throw new Error("Upload failed. Please try again.");
             }
             const { url } = await response.json();
-            onChange(url);
+            // Only apply this result if no newer selection has started since —
+            // otherwise an older, slower upload could clobber a newer one's
+            // in-progress or already-finished result.
+            if (requestIdRef.current === requestId) {
+                onChange(url);
+            }
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
-            onChange(previousValue);
+            if (requestIdRef.current === requestId) {
+                setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
+                onChange(previousValue);
+            }
         } finally {
             if (objectUrlRef.current === objectUrl) {
                 URL.revokeObjectURL(objectUrl);
                 objectUrlRef.current = null;
             }
-            setUploadingState(false);
+            if (requestIdRef.current === requestId) {
+                setUploadingState(false);
+            }
         }
     }
 
@@ -91,6 +109,7 @@ export function ImageUpload({ value, onChange, uploadType, disabled = false, onU
                 )}
             </div>
             <input
+                id={id}
                 ref={inputRef}
                 type="file"
                 accept="image/*"

@@ -66,7 +66,7 @@ class TrainerController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'specialty' => ['required', 'string', 'max:255'],
             'years_experience' => ['required', 'string', 'max:255'],
-            'bio' => ['required', 'string'],
+            'bio' => ['required', 'string', 'max:2000'],
             'certifications' => ['required', 'array', 'min:1'],
             'certifications.*' => ['string'],
             'image_path' => ['required', 'string', 'max:255'],

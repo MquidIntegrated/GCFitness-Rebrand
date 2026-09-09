@@ -20,7 +20,16 @@ class FaqController extends Controller
     {
         $validated = $this->validated($request);
 
-        $nextOrder = (int) Faq::max('sort_order') + 1;
+        $nextOrder = (int) Faq::query()
+            ->where(function ($query) use ($validated) {
+                if ($validated['show_on_contact']) {
+                    $query->orWhere('show_on_contact', true);
+                }
+                if ($validated['show_on_membership']) {
+                    $query->orWhere('show_on_membership', true);
+                }
+            })
+            ->max('sort_order') + 1;
 
         Faq::create($validated + ['sort_order' => $nextOrder]);
 
@@ -47,7 +56,7 @@ class FaqController extends Controller
     {
         $validated = $request->validate([
             'question' => ['required', 'string', 'max:255'],
-            'answer' => ['required', 'string'],
+            'answer' => ['required', 'string', 'max:2000'],
             'show_on_contact' => ['required', 'boolean'],
             'show_on_membership' => ['required', 'boolean'],
         ]);

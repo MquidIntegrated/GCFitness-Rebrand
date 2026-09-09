@@ -20,7 +20,16 @@ class TestimonialController extends Controller
     {
         $validated = $this->validated($request);
 
-        $nextOrder = (int) Testimonial::max('sort_order') + 1;
+        $nextOrder = (int) Testimonial::query()
+            ->where(function ($query) use ($validated) {
+                if ($validated['show_on_home']) {
+                    $query->orWhere('show_on_home', true);
+                }
+                if ($validated['show_on_about']) {
+                    $query->orWhere('show_on_about', true);
+                }
+            })
+            ->max('sort_order') + 1;
 
         Testimonial::create($validated + ['sort_order' => $nextOrder]);
 
@@ -46,7 +55,7 @@ class TestimonialController extends Controller
     private function validated(Request $request): array
     {
         $validated = $request->validate([
-            'quote' => ['required', 'string'],
+            'quote' => ['required', 'string', 'max:2000'],
             'name' => ['required', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:255'],
             'show_on_home' => ['required', 'boolean'],
