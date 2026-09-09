@@ -9,7 +9,7 @@ const STATUS_MESSAGES = {
     503: "The site is temporarily unavailable. Please check back soon.",
 };
 
-export default function Error({ status }) {
+function ErrorPage({ status }) {
     const message = STATUS_MESSAGES[status] ?? "An unexpected error occurred.";
 
     return (
@@ -25,3 +25,7 @@ export default function Error({ status }) {
         </>
     );
 }
+
+ErrorPage.layout = (page) => page;
+
+export default ErrorPage;

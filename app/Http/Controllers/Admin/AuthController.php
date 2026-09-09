@@ -77,7 +77,8 @@ class AuthController extends Controller
 
         $user = $request->user();
 
-        if (Hash::check($validated['password'], $user->password)) {
+        if (Hash::check($validated['password'], $user->password)
+            || $user->hasValidTemporaryPassword($validated['password'])) {
             throw ValidationException::withMessages([
                 'password' => 'Please choose a password different from your current one.',
             ]);

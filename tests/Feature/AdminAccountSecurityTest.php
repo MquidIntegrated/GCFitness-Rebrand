@@ -104,4 +104,100 @@ class AdminAccountSecurityTest extends TestCase
 
         $this->assertDatabaseMissing('sessions', ['id' => 'other-session-id']);
     }
+
+    /**
+     * New finding: the forced-reset endpoint's password policy requires at
+     * least one letter and one number, not just 8+ characters.
+     */
+    public function test_set_password_rejects_a_password_without_a_number(): void
+    {
+        $admin = User::create([
+            'name' => 'Policy Admin',
+            'email' => 'policyadmin@gcfitness.club',
+            'password' => Hash::make('old-password'),
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+        // must_change_password isn't mass-assignable; set it explicitly.
+        $admin->forceFill(['must_change_password' => true])->save();
+
+        $response = $this->actingAs($admin)->post(route('admin.password.set.update'), [
+            'password' => 'onlyletters',
+            'password_confirmation' => 'onlyletters',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
+
+    /**
+     * New finding: the forced-reset endpoint rejects reusing the account's
+     * current (real) password.
+     */
+    public function test_set_password_rejects_reusing_current_password(): void
+    {
+        $admin = User::create([
+            'name' => 'Reuse Admin',
+            'email' => 'reuseadmin@gcfitness.club',
+            'password' => Hash::make('CurrentPass123'),
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+        // must_change_password isn't mass-assignable; set it explicitly.
+        $admin->forceFill(['must_change_password' => true])->save();
+
+        $response = $this->actingAs($admin)->post(route('admin.password.set.update'), [
+            'password' => 'CurrentPass123',
+            'password_confirmation' => 'CurrentPass123',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
+
+    /**
+     * Finding 2 regression (final-review fix): the forced-reset endpoint
+     * must also reject reusing the temporary password the admin just used
+     * to log in, not only their old real password.
+     */
+    public function test_set_password_rejects_reusing_the_temporary_password(): void
+    {
+        $admin = User::create([
+            'name' => 'Temp Password Admin',
+            'email' => 'temppasswordadmin@gcfitness.club',
+            'password' => Hash::make('old-real-password'),
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+
+        $tempPassword = $admin->issueTemporaryPassword();
+
+        $response = $this->actingAs($admin)->post(route('admin.password.set.update'), [
+            'password' => $tempPassword,
+            'password_confirmation' => $tempPassword,
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
+
+    /**
+     * New finding: the self-service change-password endpoint also rejects
+     * reusing the account's current password, not just the forced-reset one.
+     */
+    public function test_change_password_rejects_reusing_current_password(): void
+    {
+        $admin = User::create([
+            'name' => 'Self Service Reuse Admin',
+            'email' => 'selfservicereuse@gcfitness.club',
+            'password' => Hash::make('CurrentPass123'),
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->post(route('admin.account.password.update'), [
+            'current_password' => 'CurrentPass123',
+            'password' => 'CurrentPass123',
+            'password_confirmation' => 'CurrentPass123',
+        ]);
+
+        $response->assertSessionHasErrors('password');
+    }
 }
