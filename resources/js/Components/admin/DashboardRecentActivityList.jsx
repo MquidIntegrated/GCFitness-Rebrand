@@ -9,6 +9,7 @@ export function DashboardRecentActivityList({ activity }) {
                 <CardTitle className="text-sm font-medium text-muted-foreground">Recently edited</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+                {activity.length === 0 && <p className="text-sm text-muted-foreground">No activity yet.</p>}
                 {activity.map((entry) => (
                     <div key={entry.id} className="flex items-start gap-3">
                         <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">

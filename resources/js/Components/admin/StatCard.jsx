@@ -1,8 +1,9 @@
+import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/Components/ui/card";
 
-export function StatCard({ label, value, icon: Icon }) {
+export function StatCard({ label, value, icon: Icon, className }) {
     return (
-        <Card>
+        <Card className={cn(className)}>
             <CardContent className="flex items-center gap-4 p-6">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">
                     <Icon className="size-5" />

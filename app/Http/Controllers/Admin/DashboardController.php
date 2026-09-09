@@ -21,30 +21,34 @@ class DashboardController extends Controller
      * app's own dashboard scope exactly (SiteSetting/SocialLink excluded).
      */
     private const TRACKED_RESOURCES = [
-        ['model' => Program::class, 'label' => 'program', 'name_column' => 'title'],
-        ['model' => Trainer::class, 'label' => 'trainer', 'name_column' => 'name'],
-        ['model' => MembershipPlan::class, 'label' => 'membership plan', 'name_column' => 'name'],
-        ['model' => Partner::class, 'label' => 'partner', 'name_column' => 'name'],
-        ['model' => ClubLocation::class, 'label' => 'location', 'name_column' => 'name'],
-        ['model' => Testimonial::class, 'label' => 'testimonial', 'name_column' => 'name'],
-        ['model' => Faq::class, 'label' => 'FAQ', 'name_column' => 'question'],
+        ['model' => Program::class, 'label' => 'program', 'name_column' => 'title', 'count_key' => 'programs'],
+        ['model' => Trainer::class, 'label' => 'trainer', 'name_column' => 'name', 'count_key' => 'trainers'],
+        ['model' => MembershipPlan::class, 'label' => 'membership plan', 'name_column' => 'name', 'count_key' => 'membershipPlans'],
+        ['model' => Partner::class, 'label' => 'partner', 'name_column' => 'name', 'count_key' => 'partners'],
+        ['model' => ClubLocation::class, 'label' => 'location', 'name_column' => 'name', 'count_key' => 'locations'],
+        ['model' => Testimonial::class, 'label' => 'testimonial', 'name_column' => 'name', 'count_key' => 'testimonials'],
+        ['model' => Faq::class, 'label' => 'FAQ', 'name_column' => 'question', 'count_key' => 'faqs'],
     ];
 
     public function index()
     {
         return inertia('Admin/Dashboard', [
-            'counts' => [
-                'programs' => Program::count(),
-                'trainers' => Trainer::count(),
-                'membershipPlans' => MembershipPlan::count(),
-                'partners' => Partner::count(),
-                'locations' => ClubLocation::count(),
-                'testimonials' => Testimonial::count(),
-                'faqs' => Faq::count(),
-            ],
+            'counts' => $this->counts(),
             'recentActivity' => $this->recentActivity(),
             'activityByDay' => $this->activityByDay(),
         ]);
+    }
+
+    /**
+     * Derives counts from the same TRACKED_RESOURCES table recentActivity()
+     * and activityByDay() already use, rather than a second hand-written
+     * list — the two can no longer drift apart.
+     */
+    private function counts(): array
+    {
+        return collect(self::TRACKED_RESOURCES)
+            ->mapWithKeys(fn ($resource) => [$resource['count_key'] => $resource['model']::count()])
+            ->all();
     }
 
     /**
