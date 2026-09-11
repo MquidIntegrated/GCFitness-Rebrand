@@ -1,17 +1,32 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Makes "dark:" variants apply based on a .dark class on an ancestor
+   element, rather than the browser/OS's prefers-color-scheme setting —
+   this app's own theme toggle switches that class, it doesn't rely on
+   the visitor's system preference. */
 @custom-variant dark (&:is(.dark *));
 
+/* Registers every design token below as a real Tailwind utility class
+   (bg-background, text-foreground, border-border, etc.). Each one just
+   points at a plain CSS variable of the same name (defined further down
+   in the theme blocks), so switching the .dark/.light class instantly
+   changes what every utility class resolves to, with no duplicated
+   color values here. */
 @theme inline {
   --font-hero: "Bebas Neue", "Oswald", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
+  /* Brand (this gym's pink/magenta accent color, used for CTAs, links,
+     the active nav highlight, focus rings, etc.) */
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-glow: var(--brand-glow);
 
+  /* Core semantic colors — shared by every shadcn/ui-based component
+     (buttons, cards, inputs, dialogs, ...) across both the public site
+     and the admin CMS. */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -36,17 +51,34 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
 
+  /* Admin sidebar (resources/js/Components/ui/sidebar.jsx). Mapped onto
+     the same core tokens above rather than given their own separate
+     values, so the sidebar always matches whichever theme is active
+     with nothing new to keep in sync. Without these, classes like
+     bg-sidebar/text-sidebar-foreground resolve to nothing — the sidebar
+     had no background at all until these were added. */
+  --color-sidebar: var(--background);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-accent: var(--accent);
+  --color-sidebar-accent-foreground: var(--accent-foreground);
+  --color-sidebar-ring: var(--ring);
+
+  /* Corner-radius scale — every rounded-* utility derives from the one
+     --radius value set per theme below. */
   --radius-sm: calc(var(--radius) - 6px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 8px);
   --radius-2xl: calc(var(--radius) + 16px);
 
+  /* Large soft shadows used behind hero sections/CTAs for a glow effect. */
   --shadow-brand: 0 20px 60px -20px color-mix(in oklab, var(--brand) 55%, transparent);
   --shadow-elevated: 0 30px 80px -30px oklch(0 0 0 / 0.8);
 }
 
-/* Dark theme (default) */
+/* Dark theme (the default — applies via :root, and also whenever a .dark
+   class is present so it always wins over the light theme below it). */
 :root,
 .dark {
   --radius: 1rem;
@@ -81,6 +113,8 @@
   --warning: oklch(0.82 0.16 80);
   --danger: oklch(0.7 0.2 15);
 
+  /* Gradient stops used behind hero-section headlines on the public site,
+     so page text stays readable over a background photo. */
   --hero-overlay-1: var(--background);
   --hero-overlay-2: color-mix(in oklab, var(--background) 85%, transparent);
   --hero-overlay-3: color-mix(in oklab, var(--background) 10%, transparent);
@@ -127,10 +161,15 @@
   --hero-overlay-3: transparent;
 }
 
+/* Tells the browser's own native UI (scrollbars, form controls, etc.) which
+   theme is active, so those match the page instead of always looking
+   like the OS's default light/dark mode. */
 .dark { color-scheme: dark; }
 .light { color-scheme: light; }
 
 @layer base {
+  /* Any element's default border color, unless overridden — saves adding
+     border-border to every single element that has a border. */
   * { border-color: var(--color-border); }
 
   html {
@@ -143,6 +182,8 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Makes switching between light/dark theme fade smoothly instead of
+       flashing instantly. */
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
@@ -151,6 +192,10 @@
     color: white;
   }
 }
+
+/* Custom utility classes below — each one is usable anywhere in the app
+   as a plain Tailwind class (e.g. className="font-hero"), same as any
+   built-in utility like "flex" or "p-4". */
 
 @utility font-hero {
   font-family: var(--font-hero);
@@ -164,10 +209,14 @@
   font-weight: 600;
 }
 
+/* The darkening gradient laid over hero background photos on the public
+   site, so white headline text stays legible over any image. */
 @utility hero-overlay {
   background-image: linear-gradient(to right, var(--hero-overlay-1), var(--hero-overlay-2), var(--hero-overlay-3));
 }
 
+/* Faint grid-line background pattern used behind a few decorative
+   sections (e.g. the login page's brand panel). */
 @utility bg-grid {
   background-image:
     linear-gradient(to right, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px),
@@ -175,6 +224,7 @@
   background-size: 48px 48px;
 }
 
+/* Soft brand-colored radial glow, used behind a few call-to-action blocks. */
 @utility bg-brand-radial {
   background: radial-gradient(
     ellipse at center,
@@ -183,12 +233,14 @@
   );
 }
 
+/* Outlined (hollow) text effect — used for large decorative headline text. */
 @utility text-outline {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--color-foreground);
   text-stroke: 1.5px var(--color-foreground);
 }
 
+/* Text that fades from the normal foreground color into the brand color. */
 @utility text-gradient-brand {
   background: linear-gradient(135deg, var(--color-foreground) 0%, var(--brand) 100%);
   -webkit-background-clip: text;
@@ -196,7 +248,9 @@
   color: transparent;
 }
 
-/* Scroll reveal */
+/* Scroll-triggered fade/slide-in effect for public-site sections — starts
+   hidden, then a small JS observer adds "is-visible" once it scrolls into
+   view (see resources/js/hooks/useScrollReveal or similar). */
 @utility reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -208,6 +262,7 @@
   transform: translateY(0);
 }
 
+/* Keyframes for the animate-* utility classes further below. */
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -232,27 +287,37 @@
   from { opacity: 0; transform: scale(0.96); }
   to { opacity: 1; transform: scale(1); }
 }
+/* The loading-bar animation shown by the preloader while the public site's
+   first page load is still in progress. */
 @keyframes preloader-bar {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+/* Slow background zoom applied to hero images. */
 @keyframes ken-burns {
   0% { transform: scale(1); }
   100% { transform: scale(1.08); }
 }
+/* The little bar that sweeps across the screen during in-app page
+   transitions (Inertia route changes). */
 @keyframes route-roller {
   0% { transform: translateX(-100%); }
   50% { transform: translateX(150%); }
   100% { transform: translateX(400%); }
 }
 
+/* Infinite horizontal scroll, used for the trusted-partners logo strip. */
 .animate-marquee { animation: marquee 70s linear infinite; }
 
+/* Fades the two edges of the marquee strip to transparent, so logos don't
+   appear to cut off abruptly at the container's edges. */
 @utility marquee-fade {
   mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
 
+/* Soft circular fade-out mask, used on a couple of decorative background
+   graphics so they don't have a hard visible edge. */
 @utility glass-fade {
   mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 35%, transparent 85%);
@@ -266,17 +331,22 @@
 .animate-route-roller { animation: route-roller 1.1s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
 .animate-ken-burns { animation: ken-burns 14s ease-out both; }
 
+/* Staggers animation start times for lists of items that fade/slide in
+   one after another instead of all at once. */
 .delay-100 { animation-delay: 0.1s; }
 .delay-200 { animation-delay: 0.2s; }
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 .delay-500 { animation-delay: 0.5s; }
 
-/* Prevent flash of unstyled content */
+/* Keeps the page from scrolling while the initial-load preloader/animation
+   is still showing, so nothing shifts underneath it. */
 html.preload-lock body {
   overflow: hidden;
 }
 
+/* Accessibility: visitors who've told their OS they prefer reduced motion
+   get all animations/transitions collapsed to near-instant instead. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
