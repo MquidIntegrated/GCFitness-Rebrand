@@ -153,7 +153,7 @@ export function AdminShell({ children }) {
             </Sidebar>
 
             <SidebarInset>
-                <header className="flex h-14 items-center justify-between border-b border-border px-4">
+                <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-border bg-background px-4">
                     <div className="flex items-center gap-3">
                         <SidebarTrigger />
                         <Separator orientation="vertical" className="h-5" />
