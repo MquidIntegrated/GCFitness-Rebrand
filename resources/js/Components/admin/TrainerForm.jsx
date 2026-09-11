@@ -19,7 +19,7 @@ export function TrainerForm({ initialValues, onCancel, onSaved, readOnly = false
     });
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    useUnsavedChangesGuard(readOnly ? false : isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(readOnly ? false : isDirty);
 
     transform((formData) => ({
         ...formData,
@@ -40,6 +40,7 @@ export function TrainerForm({ initialValues, onCancel, onSaved, readOnly = false
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-6 pb-24">
             <div className="space-y-2">
                 <Label htmlFor="image_path">Image</Label>
@@ -137,5 +138,7 @@ export function TrainerForm({ initialValues, onCancel, onSaved, readOnly = false
                 )}
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }

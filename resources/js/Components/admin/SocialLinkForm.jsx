@@ -13,7 +13,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
         icon_slug: initialValues?.icon_slug ?? "",
     });
 
-    useUnsavedChangesGuard(isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -26,6 +26,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
                 <Label htmlFor="icon_slug">Icon</Label>
@@ -66,5 +67,7 @@ export function SocialLinkForm({ initialValues, onCancel, onSaved }) {
                 </Button>
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }

@@ -16,7 +16,7 @@ export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved,
         show_on_about: initialValues?.show_on_about ?? defaultPage === "about",
     });
 
-    useUnsavedChangesGuard(readOnly ? false : isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(readOnly ? false : isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -29,6 +29,7 @@ export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved,
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
                 <Label htmlFor="quote">Quote</Label>
@@ -110,5 +111,7 @@ export function TestimonialForm({ initialValues, defaultPage, onCancel, onSaved,
                 )}
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }

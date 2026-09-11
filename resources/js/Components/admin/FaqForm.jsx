@@ -15,7 +15,7 @@ export function FaqForm({ initialValues, defaultPage, onCancel, onSaved, readOnl
         show_on_membership: initialValues?.show_on_membership ?? defaultPage === "membership",
     });
 
-    useUnsavedChangesGuard(readOnly ? false : isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(readOnly ? false : isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -28,6 +28,7 @@ export function FaqForm({ initialValues, defaultPage, onCancel, onSaved, readOnl
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
                 <Label htmlFor="question">Question</Label>
@@ -99,5 +100,7 @@ export function FaqForm({ initialValues, defaultPage, onCancel, onSaved, readOnl
                 )}
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }

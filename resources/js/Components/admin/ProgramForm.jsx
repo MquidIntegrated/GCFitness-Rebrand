@@ -22,7 +22,7 @@ export function ProgramForm({ initialValues, onCancel, onSaved, readOnly = false
     });
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    useUnsavedChangesGuard(readOnly ? false : isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(readOnly ? false : isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -35,7 +35,8 @@ export function ProgramForm({ initialValues, onCancel, onSaved, readOnly = false
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 pb-24">
+        <>
+            <form onSubmit={handleSubmit} className="space-y-6 pb-24">
             <div className="space-y-2">
                 <Label htmlFor="image_path">Image</Label>
                 <ImageUpload
@@ -152,6 +153,8 @@ export function ProgramForm({ initialValues, onCancel, onSaved, readOnly = false
                     </>
                 )}
             </div>
-        </form>
+            </form>
+            {unsavedChangesDialog}
+        </>
     );
 }

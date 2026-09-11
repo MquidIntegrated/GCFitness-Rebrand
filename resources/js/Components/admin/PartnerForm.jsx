@@ -14,7 +14,7 @@ export function PartnerForm({ initialValues, onCancel, onSaved }) {
     });
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    useUnsavedChangesGuard(isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(isDirty);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -27,6 +27,7 @@ export function PartnerForm({ initialValues, onCancel, onSaved }) {
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-4 px-1">
             <div className="space-y-2">
                 <Label htmlFor="logo_path">Logo</Label>
@@ -63,5 +64,7 @@ export function PartnerForm({ initialValues, onCancel, onSaved }) {
                 </Button>
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }

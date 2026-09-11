@@ -17,7 +17,7 @@ export function MembershipPlanForm({ initialValues, onCancel, onSaved }) {
         features: initialValues?.features?.join("\n") ?? "",
     });
 
-    useUnsavedChangesGuard(isDirty);
+    const unsavedChangesDialog = useUnsavedChangesGuard(isDirty);
 
     transform((formData) => ({
         ...formData,
@@ -42,6 +42,7 @@ export function MembershipPlanForm({ initialValues, onCancel, onSaved }) {
     }
 
     return (
+        <>
         <form onSubmit={handleSubmit} className="space-y-6 pb-24">
             <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
@@ -114,5 +115,7 @@ export function MembershipPlanForm({ initialValues, onCancel, onSaved }) {
                 </Button>
             </div>
         </form>
+        {unsavedChangesDialog}
+        </>
     );
 }
